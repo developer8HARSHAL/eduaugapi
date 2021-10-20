@@ -3,8 +3,8 @@ const app = express();
 const port =process.env.PORT|| 5785;
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
-const mongourl = "mongodb://localhost:27017"
-//const mongourl="mongodb+srv://first:1234@cluster0.ywotg.mongodb.net/eduaug?retryWrites=true&w=majority"
+/*const mongourl = "mongodb://localhost:27017"*/
+const mongourl="mongodb+srv://first:1234@cluster0.ywotg.mongodb.net/eduaug?retryWrites=true&w=majority"
 var db;
 let col_name = "first"
 
