@@ -1,11 +1,19 @@
 var express = require('express');
 const app = express();
+const bodyParser=require('body-parser');
+const dotenv=require('dotenv')
+dotenv.config()
 const port =process.env.PORT|| 5785;
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
+const cors=require('cors')
+/*https://eduintern-aug.herokuapp.com*/
 /*const mongourl = "mongodb://localhost:27017"*/
 const mongourl="mongodb+srv://first:1234@cluster0.ywotg.mongodb.net/eduaug?retryWrites=true&w=majority"
 var db;
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
+app.use(cors())
 let col_name = "first"
 
 
@@ -27,7 +35,7 @@ app.get('/cuisine', (req, res) => {
         res.send(result)
     })
 })
-app.get('/mealType', (req, res) => {
+app.get('/mealtype', (req, res) => {
         db.collection('mealType').find().toArray((err, result) => {
         if (err) throw err;
         res.send(result)
@@ -56,14 +64,20 @@ app.get('/restaurant', (req,res) =>{
     })
 })*/
 
-
-
-app.get('/first', (req, res) => {
-    db.collection(col_name).find().toArray((err, result) => {
-        if (err) throw err;
+//filterapi
+app.get('/filter/:mealType',(req,res)=>{
+    var mealType = req.params.mealType;
+    var query = {"Type:mealtype":mealType};
+    if(req.query.cuisine){
+        query={"Type:mealtype.mealtype":mealType,"cuisine.cuisine":req.query.cuisine}
+    }
+    db.collection('restaurant').find(query).toArray.toArray((err, result) => {
+        if(err)throw err;
         res.send(result)
     })
 })
+
+
 
 MongoClient.connect(mongourl, (err, client) => {
     if (err) console.log("Error While Connecting");
